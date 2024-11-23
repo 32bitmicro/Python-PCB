@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 #Copyright (C) 2014 Chris Hinsley All Rights Reserved
 
-import os, sys, argparse, select, Tkinter, aggdraw
+import os, sys, argparse, select, tkinter, aggdraw
 from ast import literal_eval
-from itertools import izip, islice, chain
+from itertools import islice, chain
 from PIL import Image, ImageTk
 from mymath import *
 
@@ -18,7 +18,7 @@ def split_paths(paths):
 	new_paths = []
 	for path in paths:
 		new_path = []
-		for a, b in izip(path, islice(path, 1, None)):
+		for a, b in zip(path, islice(path, 1, None)):
 			_, _, za = a
 			_, _, zb = b
 			if za != zb:
@@ -40,11 +40,11 @@ def scale_and_split_tracks(tracks, scale):
 		track[1] *= scale
 		track[2] *= scale
 		track[4] = split_paths(track[4])
-		for i in xrange(len(track[3])):
+		for i in range(len(track[3])):
 			r, g, (x, y, z), s = track[3][i]
 			track[3][i] = r * scale, g * scale, ((x + MARGIN) * scale, (y + MARGIN) * scale, z), [(cx * scale, cy * scale) for cx, cy in s]
 		for path in track[4]:
-			for i in xrange(len(path)):
+			for i in range(len(path)):
 				x, y, z = path[i]
 				path[i] = (x + MARGIN) * scale, (y + MARGIN) * scale, z
 
@@ -93,7 +93,7 @@ def doframe(dimensions, root, canvas, poll):
 
 	if args.o[0] == 0:
 		colors = ['red', 'green', 'blue', 'yellow', 'fuchsia', 'aqua']
-		for depth in xrange(pcb_depth - 1, -1, -1):
+		for depth in range(pcb_depth - 1, -1, -1):
 			brush = aggdraw.Brush(colors[depth % len(colors)], opacity = 128)
 			for track in tracks:
 				radius, via, gap, terminals, paths = track
@@ -118,7 +118,7 @@ def doframe(dimensions, root, canvas, poll):
 						points = list(chain.from_iterable([(cx + x, cy + y) for cx, cy in s]))
 						ctx.polygon(points, white_brush)
 	else:
-		for depth in xrange(pcb_depth):
+		for depth in range(pcb_depth):
 			for track in tracks:
 				radius, via, gap, terminals, paths = track
 				for path in paths:
@@ -142,7 +142,7 @@ def doframe(dimensions, root, canvas, poll):
 						if r == 0:
 							points = list(chain.from_iterable([(cx + x, cy + y) for cx, cy in s]))
 							ctx.polygon(points, white_brush)
-		for depth in xrange(pcb_depth):
+		for depth in range(pcb_depth):
 			for track in tracks:
 				radius, via, gap, terminals, paths = track
 				for path in paths:
@@ -169,7 +169,7 @@ def doframe(dimensions, root, canvas, poll):
 							ctx.polygon(points, black_brush)
 	ctx.flush()
 	photo = ImageTk.PhotoImage(image)
-	canvas.create_image(0, 0, image = photo, anchor = Tkinter.NW)
+	canvas.create_image(0, 0, image = photo, anchor = tkinter.NW)
 	root.update()
 	root.after(0, doframe, dimensions, root, canvas, poll)
 
@@ -203,16 +203,16 @@ def main():
 	else:
 		pcb_height = int(pcb_height * pcb_depth * scale)
 
-	root = Tkinter.Tk()
+	root = tkinter.Tk()
 	root.maxsize(pcb_width, pcb_height)
 	root.minsize(pcb_width, pcb_height)
 	root.title("PCB Veiwer")
-	menu_bar = Tkinter.Menu(root)
-	sub_menu = Tkinter.Menu(menu_bar)
+	menu_bar = tkinter.Menu(root)
+	sub_menu = tkinter.Menu(menu_bar)
 	menu_bar.add_cascade(label = 'Help', menu = sub_menu)
 	sub_menu.add_command(label = 'About', command = about_menu_handler)
 	root['menu'] = menu_bar
-	canvas = Tkinter.Canvas(root, width = pcb_width, height = pcb_height)
+	canvas = tkinter.Canvas(root, width = pcb_width, height = pcb_height)
 	canvas['background'] = 'black'
 	canvas.pack()
 

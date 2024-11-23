@@ -30,14 +30,14 @@ def main():
 	path_range_x_even_layer = flood_range_x_even_layer + 0
 	path_range_y_odd_layer = flood_range_y_odd_layer + 0
 
-	routing_flood_vectors = [[(x, y, 0) for x in xrange(-flood_range_x_even_layer, flood_range_x_even_layer + 1) for y in xrange(-flood_range, flood_range + 1) \
+	routing_flood_vectors = [[(x, y, 0) for x in range(-flood_range_x_even_layer, flood_range_x_even_layer + 1) for y in range(-flood_range, flood_range + 1) \
 		 						if length_2d((x, y)) > 0.1 and length_2d((x, y)) <= flood_range] + [(0, 0, -1), (0, 0, 1)], \
-							[(x, y, 0) for x in xrange(-flood_range, flood_range + 1) for y in xrange(-flood_range_y_odd_layer, flood_range_y_odd_layer + 1) \
+							[(x, y, 0) for x in range(-flood_range, flood_range + 1) for y in range(-flood_range_y_odd_layer, flood_range_y_odd_layer + 1) \
 								 if length_2d((x, y)) > 0.1 and length_2d((x, y)) <= flood_range] + [(0, 0, -1), (0, 0, 1)]]
 
-	routing_path_vectors = [[(x, y, 0) for x in xrange(-path_range_x_even_layer, path_range_x_even_layer + 1) for y in xrange(-path_range, path_range + 1) \
+	routing_path_vectors = [[(x, y, 0) for x in range(-path_range_x_even_layer, path_range_x_even_layer + 1) for y in range(-path_range, path_range + 1) \
 		 						if length_2d((x, y)) > 0.1 and length_2d((x, y)) <= path_range] + [(0, 0, -1), (0, 0, 1)], \
-							[(x, y, 0) for x in xrange(-path_range, path_range + 1) for y in xrange(-path_range_y_odd_layer, path_range_y_odd_layer + 1) \
+							[(x, y, 0) for x in range(-path_range, path_range + 1) for y in range(-path_range_y_odd_layer, path_range_y_odd_layer + 1) \
 								 if length_2d((x, y)) > 0.1 and length_2d((x, y)) <= path_range] + [(0, 0, -1), (0, 0, 1)]]
 
 	dfunc = [manhattan_distance, squared_euclidean_distance, euclidean_distance, \
@@ -55,7 +55,7 @@ def main():
 	pcb.print_pcb()
 	best_cost = None
 	best_pcb = None
-	for i in xrange(args.s[0]):
+	for i in range(args.s[0]):
 		if not pcb.route(args.t[0]):
 			pcb.shuffle_netlist()
 			continue
@@ -68,7 +68,7 @@ def main():
 		best_pcb.print_netlist()
 		best_pcb.print_stats()
 	else:
-		print []
+		print([])
 
 if __name__ == '__main__':
 	main()

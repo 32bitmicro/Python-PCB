@@ -43,11 +43,11 @@ def scale_and_split_tracks(tracks, scale):
 		track[1] *= scale
 		track[2] *= scale
 		track[4] = split_paths(track[4])
-		for i in xrange(len(track[3])):
+		for i in range(len(track[3])):
 			r, g, (x, y, z), s = track[3][i]
 			track[3][i] = r * scale, g * scale, ((x + MARGIN) * scale, (y + MARGIN) * scale, z), [(cx * scale, cy * scale) for cx, cy in s]
 		for path in track[4]:
-			for i in xrange(len(path)):
+			for i in range(len(path)):
 				x, y, z = path[i]
 				path[i] = (x + MARGIN) * scale, (y + MARGIN) * scale, z
 
@@ -94,7 +94,7 @@ def doframe(frame_num, dimensions, poll, fig, ax):
 
 	if args.o[0] == 0:
 		colors = ['red', 'green', 'blue', 'yellow', 'fuchsia', 'aqua']
-		for depth in xrange(pcb_depth - 1, -1, -1):
+		for depth in range(pcb_depth - 1, -1, -1):
 			brush = colors[depth % len(colors)]
 			for track in tracks:
 				radius, via, gap, terminals, paths = track
@@ -124,7 +124,7 @@ def doframe(frame_num, dimensions, poll, fig, ax):
 						poly = plt.Polygon(points, facecolor = 'white', edgecolor = 'none')
 						ax.add_patch(poly)
 	else:
-		for depth in xrange(pcb_depth):
+		for depth in range(pcb_depth):
 			for track in tracks:
 				radius, via, gap, terminals, paths = track
 				for path in paths:
@@ -153,7 +153,7 @@ def doframe(frame_num, dimensions, poll, fig, ax):
 							points = [(cx + x, cy + y) for cx, cy in s]
 							poly = plt.Polygon(points, facecolor = 'white', edgecolor = 'none')
 							ax.add_patch(poly)
-		for depth in xrange(pcb_depth):
+		for depth in range(pcb_depth):
 			for track in tracks:
 				radius, via, gap, terminals, paths = track
 				for path in paths:

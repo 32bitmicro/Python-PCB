@@ -7,7 +7,7 @@ class Layer():
 	def __init__(self, dimensions, scale):
 		self.width, self.height = dimensions
 		self.scale = scale
-		self.buckets = [[] for x in xrange(self.width * self.height)]
+		self.buckets = [[] for x in range(self.width * self.height)]
 		self.test = 0
 
 	def aabb(self, line):
@@ -33,14 +33,14 @@ class Layer():
 
 	def all_buckets(self, aabb):
 		x1, y1, x2, y2 = aabb
-		for y in xrange(y1, y2):
-			for x in xrange(x1, x2):
+		for y in range(y1, y2):
+			for x in range(x1, x2):
 				yield self.buckets[y * self.width + x]
 
 	def all_not_empty_buckets(self, aabb):
 		x1, y1, x2, y2 = aabb
-		for y in xrange(y1, y2):
-			for x in xrange(x1, x2):
+		for y in range(y1, y2):
+			for x in range(x1, x2):
 				bucket = self.buckets[y * self.width + x]
 				if bucket:
 					yield bucket
@@ -58,7 +58,7 @@ class Layer():
 
 	def sub_line(self, line):
 		for bucket in self.all_not_empty_buckets(self.aabb(line)):
-			for i in xrange(len(bucket) - 1, -1, -1):
+			for i in range(len(bucket) - 1, -1, -1):
 				if bucket[i][1] == line:
 					del bucket[i]
 
@@ -78,11 +78,11 @@ class Layer():
 class Layers():
 	def __init__(self, dimensions, scale):
 		width, height, self.depth = dimensions
-		self.layers = [Layer((width, height), scale) for z in xrange(self.depth)]
+		self.layers = [Layer((width, height), scale) for z in range(self.depth)]
 
 	def all_layers(self, z1, z2):
 		if z1 != z2:
-			for z in xrange(self.depth):
+			for z in range(self.depth):
 				yield self.layers[z]
 		else:
 			yield self.layers[int(z1)]

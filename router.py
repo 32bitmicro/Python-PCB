@@ -3,7 +3,7 @@
 
 import sys, time
 from array import array
-from itertools import islice, izip, groupby
+from itertools import islice, groupby
 from random import shuffle
 from mymath import *
 from layer import *
@@ -28,7 +28,7 @@ class Pcb():
 		self.width *= resolution
 		self.height *= resolution
 		self.stride = self.width * self.height
-		self.nodes = array('i', [0 for x in xrange(self.stride * self.depth)])
+		self.nodes = array('i', [0 for x in range(self.stride * self.depth)])
 		self.netlist = []
 		self.deform = {}
 
@@ -98,7 +98,7 @@ class Pcb():
 				break
 
 	def unmark_distances(self):
-		self.nodes = array('i', [0 for x in xrange(self.stride * self.depth)])
+		self.nodes = array('i', [0 for x in range(self.stride * self.depth)])
 
 	def add_track(self, track):
 		radius, via, gap, net = track
@@ -144,12 +144,12 @@ class Pcb():
 	def print_netlist(self):
 		for net in self.netlist:
 			net.print_net()
-		print []
+		print([])
 		sys.stdout.flush()
 
 	def print_pcb(self):
 		scale = 1.0 / self.resolution
-		print [self.width * scale, self.height * scale, self.depth]
+		print([self.width * scale, self.height * scale, self.depth])
 		sys.stdout.flush()
 
 	def print_stats(self):
@@ -159,7 +159,7 @@ class Pcb():
 		for net in self.netlist:
 			num_terminals += len(net.terminals)
 			for path in net.paths:
-				for a, b in izip(path, islice(path, 1, None)):
+				for a, b in zip(path, islice(path, 1, None)):
 					if a[2] != b[2]:
 						num_vias += 1
 		print >> sys.stderr, "Number of Terminals:", num_terminals
@@ -179,7 +179,7 @@ class Net():
 		self.paths = []
 		self.remove()
 		for term in self.terminals:
-			for z in xrange(pcb.depth):
+			for z in range(pcb.depth):
 				pcb.deform[(int(term[2][0] + 0.5), int(term[2][1] + 0.5), z)] = (term[2][0], term[2][1], float(z))
 
 	def optimise_paths(self, paths):
@@ -187,7 +187,7 @@ class Net():
 		for path in paths:
 			opt_path = []
 			d = (0, 0, 0)
-			for a, b in izip(path, islice(path, 1, None)):
+			for a, b in zip(path, islice(path, 1, None)):
 				p0 = self.pcb.grid_to_space_point(a)
 				p1 = self.pcb.grid_to_space_point(b)
 				d1 = norm_3d(sub_3d(p1, p0))
@@ -203,7 +203,7 @@ class Net():
 
 	def add_paths_collision_lines(self):
 		for path in self.paths:
-			for a, b in izip(path, islice(path, 1, None)):
+			for a, b in zip(path, islice(path, 1, None)):
 				p0 = self.pcb.grid_to_space_point(a)
 				p1 = self.pcb.grid_to_space_point(b)
 				if a[2] != b[2]:
@@ -213,7 +213,7 @@ class Net():
 
 	def sub_paths_collision_lines(self):
 		for path in self.paths:
-			for a, b in izip(path, islice(path, 1, None)):
+			for a, b in zip(path, islice(path, 1, None)):
 				p0 = self.pcb.grid_to_space_point(a)
 				p1 = self.pcb.grid_to_space_point(b)
 				if a[2] != b[2]:
@@ -227,8 +227,8 @@ class Net():
 			if not s:
 				self.pcb.layers.add_line((x, y, 0), (x, y, self.pcb.depth - 1), r, g)
 			else:
-				for z in xrange(self.pcb.depth):
-					for a, b in izip(s, islice(s, 1, None)):
+				for z in range(self.pcb.depth):
+					for a, b in zip(s, islice(s, 1, None)):
 						self.pcb.layers.add_line((x + a[0], y + a[1], z), (x + b[0], y + b[1], z), r, g)
 
 	def sub_terminal_collision_lines(self):
@@ -237,8 +237,8 @@ class Net():
 			if not s:
 				self.pcb.layers.sub_line((x, y, 0), (x, y, self.pcb.depth - 1), r, g)
 			else:
-				for z in xrange(self.pcb.depth):
-					for a, b in izip(s, islice(s, 1, None)):
+				for z in range(self.pcb.depth):
+					for a, b in zip(s, islice(s, 1, None)):
 						self.pcb.layers.sub_line((x + a[0], y + a[1], z), (x + b[0], y + b[1], z), r, g)
 
 	def remove(self):
@@ -252,9 +252,9 @@ class Net():
 			self.paths = []
 			self.sub_terminal_collision_lines()
 			visited = set()
-			for index in xrange(1, len(self.terminals)):
-				visited |= set([(int(self.terminals[index - 1][2][0]+0.5), int(self.terminals[index - 1][2][1]+0.5), z) for z in xrange(self.pcb.depth)])
-				ends = [(int(self.terminals[index][2][0]+0.5), int(self.terminals[index][2][1]+0.5), z) for z in xrange(self.pcb.depth)]
+			for index in range(1, len(self.terminals)):
+				visited |= set([(int(self.terminals[index - 1][2][0]+0.5), int(self.terminals[index - 1][2][1]+0.5), z) for z in range(self.pcb.depth)])
+				ends = [(int(self.terminals[index][2][0]+0.5), int(self.terminals[index][2][1]+0.5), z) for z in range(self.pcb.depth)]
 				self.pcb.mark_distances(self.pcb.routing_flood_vectors, self.radius, self.via, self.gap, visited, ends)
 				ends = [(self.pcb.get_node(node), node) for node in ends]
 				ends.sort()
@@ -290,7 +290,7 @@ class Net():
 			for node in path:
 				spath += [self.pcb.grid_to_space_point(node)]
 			spaths += [spath]
-		print [self.radius * scale, self.via * scale, self.gap * scale, \
+		print([self.radius * scale, self.via * scale, self.gap * scale, \
 				[(r * scale, g * scale, (x * scale, y * scale, z), \
 				[(cx * scale, cy * scale) for cx, cy in s]) for r, g, (x, y, z), s in self.terminals], \
-				[[(x * scale, y * scale, z) for x, y, z in spath] for spath in spaths]]
+				[[(x * scale, y * scale, z) for x, y, z in spath] for spath in spaths]])

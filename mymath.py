@@ -6,16 +6,16 @@ import math, random, itertools
 #generic distance metric stuff
 
 def manhattan_distance(p1, p2):
-	return sum(abs(x - y) for x, y in itertools.izip(p1, p2))
+	return sum(abs(x - y) for x, y in zip(p1, p2))
 
 def euclidean_distance(p1, p2):
-	return math.sqrt(sum((x - y) ** 2 for x, y in itertools.izip(p1, p2)))
+	return math.sqrt(sum((x - y) ** 2 for x, y in zip(p1, p2)))
 
 def squared_euclidean_distance(p1, p2):
-	return sum((x - y) ** 2 for x, y in itertools.izip(p1, p2))
+	return sum((x - y) ** 2 for x, y in zip(p1, p2))
 
 def chebyshev_distance(p1, p2):
-	return max(abs(x - y) for x, y in itertools.izip(p1, p2))
+	return max(abs(x - y) for x, y in zip(p1, p2))
 
 def reciprical_distance(p1, p2):
 	d = manhattan_distance(p1, p2)
@@ -37,16 +37,16 @@ def equal(p1, p2):
 	return manhattan_distance(p1, p2) == 0.0
 
 def add(p1, p2):
-	return tuple(x + y for x, y in itertools.izip(p1, p2))
+	return tuple(x + y for x, y in zip(p1, p2))
 
 def sub(p1, p2):
-	return tuple(x - y for x, y in itertools.izip(p1, p2))
+	return tuple(x - y for x, y in zip(p1, p2))
 
 def scale(p, s):
 	return tuple(x * s for x in p)
 
 def dot(p1, p2):
-	return sum(x * y for x, y in itertools.izip(p1, p2))
+	return sum(x * y for x, y in zip(p1, p2))
 
 def length(p):
 	return math.sqrt(dot(p, p))
@@ -297,7 +297,7 @@ def thicken_path_2d(points, radius, capstyle, joinstyle):
 		elif capstyle == 3:
 			#round cap
 			rvx, rvy = rv
-			for i in xrange(resolution + 1):
+			for i in range(resolution + 1):
 				angle = (i * math.pi) / resolution
 				s = math.sin(angle)
 				c = math.cos(angle)
@@ -325,7 +325,7 @@ def thicken_path_2d(points, radius, capstyle, joinstyle):
 				rvx, rvy = scale_2d(l1_npv, radius)
 				theta = math.acos(dot_2d(l1_npv, l2_npv))
 				segs = int((theta / math.pi) * resolution) + 1
-				for i in xrange(segs + 1):
+				for i in range(segs + 1):
 					angle = (i * theta) / segs
 					s = math.sin(angle)
 					c = math.cos(angle)
